@@ -40,7 +40,7 @@ function bundleJs() {
     .pipe(concat('index.js'))          // concatenate all JS files
     .pipe(uglify())
     .pipe(sourcemaps.write('.'))        // emit the .map file for debugging
-    .pipe(gulp.dest('public'));
+    .pipe(gulp.dest('public/js'));
 }
 
 function bundleCss(){
