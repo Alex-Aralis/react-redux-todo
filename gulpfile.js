@@ -9,81 +9,59 @@ var cleanCSS = require('gulp-clean-css');
 var connect = require('gulp-connect');
 var uglify = require('gulp-uglify');
 
-gulp.task('app-js', appJs);
-gulp.task('vendor-js', vendorJs);
-gulp.task('scss', scss);
-gulp.task('css', css);
+gulp.task('bundle-js', bundleJs);
+gulp.task('bundle-css', bundleCss);
 gulp.task('start-web-server', startWebServer);
 gulp.task('watch', watch);
-gulp.task('build', ['app-js', 'vendor-js', 'scss', 'css']);
+gulp.task('index-html', indexHtml);
+gulp.task('build', ['bundle-js', 'index-html', 'bundle-css']);
 gulp.task('default', ['build', 'start-web-server', 'watch']);
 
 /////////////////////
 
-
-var vendorJsFiles = [
-
-];
-
-var sassFiles = [
+var cssFiles = [
   'app/assets/scss/**/*.scss',
   'app/assets/sass/**/*.sass',
-];
-
-var cssFiles = [
   'app/assets/css/**/*.css',
 ];
 
-function appJs(){
-  return bundle('app/index.js', 'index.js');
+function indexHtml(){
+  return gulp.src('app/index.html')
+    .pipe(gulp.dest('public'));
 }
 
-function vendorJs(){
-  return bundle(vendorJsFiles, 'vender.js');
-}
-
-function bundle(inFiles, outFile) {
-  return gulp.src(inFiles)
+function bundleJs() {
+  return gulp.src('app/index.js')
     .pipe(plumber())                    // restart gulp on error
     .pipe(sourcemaps.init())            // let sourcemaps watch this pipeline
     .pipe(babel({
       presets: ['es2015']
     }))                                 // transpile into ES5 for browsers
-    .pipe(concat(outFile))          // concatenate all JS files
+    .pipe(concat('index.js'))          // concatenate all JS files
     .pipe(uglify())
     .pipe(sourcemaps.write('.'))        // emit the .map file for debugging
     .pipe(gulp.dest('public'));
 }
 
-function scss(){
+function bundleCss(){
   var autoprefixerOptions = {
     browsers: ['last 2 versions'],
   };
 
-  return gulp.src(sassFiles)
+  return gulp.src(cssFiles)
     .pipe(plumber())
     .pipe(sourcemaps.init())
     .pipe(sass())
     .pipe(autoprefixer(autoprefixerOptions))
     .pipe(cleanCSS())
-    .pipe(concat('sass.css'))
+    .pipe(concat('index.css'))
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('public/css'));
-}
-
-function css(){
-  return gulp.src(cssFiles)
-    .pipe(plumber())
-    .pipe(sourcemaps.init())
-    .pipe(cleanCSS())
-    .pipe(concat('css.css'))
-    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('public/css'));
 }
 
 function startWebServer() {
   connect.server({
-    root: 'app',
+    root: 'public',
     port: 8000,
   });
 }
