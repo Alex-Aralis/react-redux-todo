@@ -1,0 +1,19 @@
+{
+  "name": "react-redux-todo",
+  "version": "1.0.0",
+  "description": "Another rehash of the old standy the todo app.  This is only an exercise for myself.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alex-Aralis/react-redux-todo.git"
+  },
+  "author": "Alex Aralis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Alex-Aralis/react-redux-todo/issues"
+  },
+  "homepage": "https://github.com/Alex-Aralis/react-redux-todo#readme"
+}
