@@ -26,19 +26,20 @@ var vendorJsFiles = [
 ];
 
 var sassFiles = [
-  'app/assets/sass/**/*.scss',
+  'app/assets/scss/**/*.scss',
+  'app/assets/sass/**/*.sass',
 ];
 
 var cssFiles = [
-  'app/assests/css/**/*.css',
+  'app/assets/css/**/*.css',
 ];
 
 function appJs(){
-  return bundle('app/index.js', 'public/index.js');
+  return bundle('app/index.js', 'index.js');
 }
 
 function vendorJs(){
-  return bundle(vendorJsFiles, 'public/vender.js');
+  return bundle(vendorJsFiles, 'vender.js');
 }
 
 function bundle(inFiles, outFile) {
@@ -48,10 +49,10 @@ function bundle(inFiles, outFile) {
     .pipe(babel({
       presets: ['es2015']
     }))                                 // transpile into ES5 for browsers
-    .pipe(concat('bundle.js'))          // concatenate all JS files
+    .pipe(concat(outFile))          // concatenate all JS files
     .pipe(uglify())
     .pipe(sourcemaps.write('.'))        // emit the .map file for debugging
-    .pipe(gulp.dest(outFile));
+    .pipe(gulp.dest('public'));
 }
 
 function scss(){
@@ -65,7 +66,7 @@ function scss(){
     .pipe(sass())
     .pipe(autoprefixer(autoprefixerOptions))
     .pipe(cleanCSS())
-    .pipe(concat('scss.css'))
+    .pipe(concat('sass.css'))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('public/css'));
 }
