@@ -16,6 +16,9 @@
     "shared-node-broswer": true
   },
   "rules": {
-    "quotes": ["error", "single"]
+    "quotes": ["error", "single"],
+    "strict": ["off"],
+    "no-comma-dangle": ["error", "always-multiline"],
+    "no-use-before-define": ["error", {"functions": false}]
   }
 }
