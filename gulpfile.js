@@ -44,10 +44,10 @@ function bundleJs() {
       entries: ['app/index.js'],
       extensions: ['.js'],
     })
-    .transform("babelify", {presets: ["es2015"]})
+    .transform("babelify", {presets: ["es2015", "react"]})
     .bundle()
     .pipe(source('index.js'))
-    .pipe(plumber())                    // restart gulp on error
+    //.pipe(plumber())                    // restart gulp on error
     //.pipe(sourcemaps.init())            // let sourcemaps watch this pipeline
     //.pipe(babel({
     //  presets: ['es2015']
