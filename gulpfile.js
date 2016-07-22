@@ -8,6 +8,8 @@ var sourcemaps = require('gulp-sourcemaps');
 var cleanCSS = require('gulp-clean-css');
 var connect = require('gulp-connect');
 var uglify = require('gulp-uglify');
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
 
 gulp.task('bundle-js', bundleJs);
 gulp.task('bundle-css', bundleCss);
@@ -25,21 +27,34 @@ var cssFiles = [
   'app/assets/css/**/*.css',
 ];
 
+var jsFiles = [
+  'app/**/*.js',
+  'node_modules/react/dist/react.js',
+  'node_modules/react-dom/dist/react-dom.js',
+  'node_modules/react-redux/dist/react-redux.js'
+];
+
 function indexHtml(){
   return gulp.src('app/index.html')
     .pipe(gulp.dest('public'));
 }
 
 function bundleJs() {
-  return gulp.src('app/index.js')
+  return browserify({
+      entries: ['app/index.js'],
+      extensions: ['.js'],
+    })
+    .transform("babelify", {presets: ["es2015"]})
+    .bundle()
+    .pipe(source('index.js'))
     .pipe(plumber())                    // restart gulp on error
-    .pipe(sourcemaps.init())            // let sourcemaps watch this pipeline
-    .pipe(babel({
-      presets: ['es2015']
-    }))                                 // transpile into ES5 for browsers
-    .pipe(concat('index.js'))          // concatenate all JS files
-    .pipe(uglify())
-    .pipe(sourcemaps.write('.'))        // emit the .map file for debugging
+    //.pipe(sourcemaps.init())            // let sourcemaps watch this pipeline
+    //.pipe(babel({
+    //  presets: ['es2015']
+    //}))                                 // transpile into ES5 for browsers
+    //.pipe(concat('index.js'))          // concatenate all JS files
+    //.pipe(uglify())
+    //.pipe(sourcemaps.write('.'))        // emit the .map file for debugging
     .pipe(gulp.dest('public/js'));
 }
 

@@ -1,3 +1,3 @@
-import a from 'components/otherfile';
+import React from 'react'
 
-console.log(a);
+console.log(React);
